@@ -20,8 +20,12 @@ public class Controller {
     /**
      * The list of stock ticker symbols that we will track
      */
-    private String[] codes = new String[]{"V", "AZN", "AAPL", "AVGO", "MSFT", "AMZN", "GOOG", "JNJ", "XOM", "JPM", "PG", "NVDA", "HD", "CVX", "MA", "LLY", "TSLA", "PFE", "ABBV", "MRK", "META", "PEP", "KO", "BAC", "TMO", "WMT", "COST", "CSCO", "MCD", "ABT", "DHR", "ACN", "VZ", "NEE", "DIS", "WFC", "LIN", "ADBE", "PM", "NKE", "T", "NFLX", "IBM", "LOW", "GS"};
+    private String[] stocksToTrack = new String[]{"V", "AZN", "AAPL", "AVGO", "MSFT", "AMZN", "GOOG", "JNJ", "XOM", "JPM", "PG", "NVDA", "HD", "CVX", "MA", "LLY", "TSLA", "PFE", "ABBV", "MRK", "META", "PEP", "KO", "BAC", "TMO", "WMT", "COST", "CSCO", "MCD", "ABT", "DHR", "ACN", "VZ", "NEE", "DIS", "WFC", "LIN", "ADBE", "PM", "NKE", "T", "NFLX", "IBM", "LOW", "GS"};
 
+    /**
+     * The number of standard deviations below the average to set the buy limit
+     */
+    private final double STANDARD_DEVIATIONS = 1.45;
 
     /**
      * Initialize the entire system
@@ -45,8 +49,12 @@ public class Controller {
      */
     public Controller(){
 
-        this.calc = new Calculator(new ICalc2View() {
+        this.calc = new Calculator(stocksToTrack, STANDARD_DEVIATIONS, new ICalc2View() {
 
+            @Override
+            public void setYesterdayText(String yesterdayPerformanceText) {
+                view.setYesterdayText(yesterdayPerformanceText);
+            }
         });
 
         this.view = new View(new IView2Calc() {
